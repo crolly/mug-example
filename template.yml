@@ -1,0 +1,38 @@
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  ListCoursesFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Runtime: go1.x
+      Handler: list
+      CodeUri: ./debug/course
+      Events:
+        ListCoursesApi:
+            Type: Api
+            Properties:
+                Path: /courses
+                Method: GET
+  CreateCoursesFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Runtime: go1.x
+      Handler: create
+      CodeUri: ./debug/course
+      Events:
+        CreateCoursesApi:
+            Type: Api
+            Properties:
+                Path: /courses
+                Method: POST
+  CreateUsersFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Runtime: go1.x
+      Handler: create
+      CodeUri: ./debug/user
+      Events:
+        CreateCoursesApi:
+            Type: Api
+            Properties:
+                Path: /users
+                Method: POST

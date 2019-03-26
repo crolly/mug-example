@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "ListCourses lambda debug",
+        "type": "go",
+        "request": "launch",
+        "mode": "remote",
+        "remotePath": "",
+        "port": 5986,
+        "host": "127.0.0.1",
+        "program": "${file}",
+        "env": {},
+        "args": [],
+      },
+    ]
+  }
