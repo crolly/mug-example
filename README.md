@@ -1,5 +1,4 @@
 # Example using mug - microservices understand golang
-<p align="center"><img src="./logo.svg" width="480px" /></p>
 
 This repository is an example for the mug generator following the Getting Started guide.
 Two resources are created (Course and User).
