@@ -18,10 +18,10 @@ import (
 
 // User defines the User model
 type User struct {
-	ID       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	IsActive bool      `json:"is_active"`
-	Email    string    `json:"email"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	IsActive bool   `json:"is_active"`
+	Email    string `json:"email"`
 
 	Address     Address       `json:"address"`
 	Enrollments []Enrollments `json:"enrollments"`
@@ -36,7 +36,7 @@ type Address struct {
 
 // Enrollments defines the Enrollments model
 type Enrollments struct {
-	CourseID  uuid.UUID `json:"course_id"`
+	CourseID  string    `json:"course_id"`
 	StartDate time.Time `json:"start_date"`
 	EndDate   time.Time `json:"end_date"`
 }
@@ -67,9 +67,9 @@ func Put(body string) (User, error) {
 	json.Unmarshal([]byte(body), &user)
 
 	// Generate new UUID to store User in case user doesn't have one
-	if user.ID == uuid.Nil {
+	if uuid.Must(uuid.FromString(user.ID)) == uuid.Nil {
 		id, _ := uuid.NewV4()
-		user.ID = id
+		user.ID = id.String()
 	}
 
 	// Marshall the Item into a Map DynamoDB can deal with
@@ -116,7 +116,7 @@ func Read(id string) (User, error) {
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
-				B: []byte(aws.StringValue(aws.String(id))),
+				S: aws.String(id),
 			},
 		},
 	})
@@ -160,7 +160,7 @@ func Delete(id string) error {
 	input := &dynamodb.DeleteItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
-				B: []byte(aws.StringValue(aws.String(id))),
+				S: aws.String(id),
 			},
 		},
 		TableName: aws.String(tableName),

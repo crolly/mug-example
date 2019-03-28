@@ -21,7 +21,7 @@ func ReadHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 	}
 
 	// Make sure the user isn't empty
-	if user.ID == uuid.Nil {
+	if uuid.Must(uuid.FromString(user.ID)) == uuid.Nil {
 		fmt.Println("Could not find user")
 		return events.APIGatewayProxyResponse{Body: request.Body, StatusCode: 500}, nil
 	}

@@ -16,10 +16,10 @@ import (
 
 // Course defines the Course model
 type Course struct {
-	ID          uuid.UUID `json:"id"`
-	Name        string    `json:"name"`
-	Subtitle    string    `json:"subtitle"`
-	Description string    `json:"description"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Subtitle    string `json:"subtitle"`
+	Description string `json:"description"`
 }
 
 // Put extracts the Course from JSON and writes it to DynamoDB
@@ -48,9 +48,9 @@ func Put(body string) (Course, error) {
 	json.Unmarshal([]byte(body), &course)
 
 	// Generate new UUID to store Course in case course doesn't have one
-	if course.ID == uuid.Nil {
+	if uuid.Must(uuid.FromString(course.ID)) == uuid.Nil {
 		id, _ := uuid.NewV4()
-		course.ID = id
+		course.ID = id.String()
 	}
 
 	// Marshall the Item into a Map DynamoDB can deal with
@@ -97,7 +97,7 @@ func Read(id string) (Course, error) {
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
-				B: []byte(aws.StringValue(aws.String(id))),
+				S: aws.String(id),
 			},
 		},
 	})
@@ -141,7 +141,7 @@ func Delete(id string) error {
 	input := &dynamodb.DeleteItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
-				B: []byte(aws.StringValue(aws.String(id))),
+				S: aws.String(id),
 			},
 		},
 		TableName: aws.String(tableName),

@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/gofrs/uuid"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/gofrs/uuid"
 
 	"github.com/crolly/mug-example/functions/course"
 )
@@ -21,7 +22,7 @@ func ReadHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 	}
 
 	// Make sure the course isn't empty
-	if course.ID == uuid.Nil {
+	if uuid.Must(uuid.FromString(course.ID)) == uuid.Nil {
 		fmt.Println("Could not find course")
 		return events.APIGatewayProxyResponse{Body: request.Body, StatusCode: 500}, nil
 	}
